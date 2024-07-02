@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class AuthUserService {
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
@@ -24,7 +24,7 @@ public class UserService {
         }
         User obj = new User(null, user.name(), user.email(), passwordEncoder.encode(user.password()));
         repository.save(obj);
-        return new ResponseDTO(obj.getId(), obj.getEmail(), obj.getName(), tokenService.generateToken(obj));
+        return new ResponseDTO(obj.getId(), obj.getEmail(), obj.getName(), tokenService.generateToken(obj), obj.getAddress());
     }
 
     public ResponseDTO authenticateUser(String email, String password) {
@@ -33,7 +33,7 @@ public class UserService {
             throw new AuthenticateException("Incorrect password");
         }
 
-        return new ResponseDTO(user.getId(), user.getEmail(), user.getName(), tokenService.generateToken(user));
+        return new ResponseDTO(user.getId(), user.getEmail(), user.getName(), tokenService.generateToken(user), user.getAddress());
     }
 
 }

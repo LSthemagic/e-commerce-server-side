@@ -1,8 +1,9 @@
 package com.railansantana.e_commerce.resource.exceptions;
 
-
 import java.time.Instant;
 
+
+import com.railansantana.e_commerce.infra.security.execeptions.SecurityException;
 import com.railansantana.e_commerce.services.Exceptions.AuthenticateException;
 import com.railansantana.e_commerce.services.Exceptions.DatabaseException;
 import com.railansantana.e_commerce.services.Exceptions.ResourceNotFoundException;
@@ -20,17 +21,15 @@ public class ResourceExceptionHandler {
     public ResponseEntity<StandardError> resourceNotFound(ResourceNotFoundException e, HttpServletRequest request) {
         String error = "Resource Not Found";
         HttpStatus status = HttpStatus.NOT_FOUND;
-        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
-                request.getRequestURI());
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
 
     @ExceptionHandler(DatabaseException.class)
     public ResponseEntity<StandardError> database(DatabaseException e, HttpServletRequest request) {
-        String error = "database error";
+        String error = "Database error";
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
-                request.getRequestURI());
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
 
@@ -38,8 +37,15 @@ public class ResourceExceptionHandler {
     public ResponseEntity<StandardError> authenticate(AuthenticateException e, HttpServletRequest request) {
         String error = "Authenticate error";
         HttpStatus status = HttpStatus.UNAUTHORIZED;
-        StandardError err = new StandardError(Instant.now(), status.value(),
-                error, e.getMessage(), request.getRequestURI());
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(SecurityException.class)
+    public ResponseEntity<StandardError> security(SecurityException e, HttpServletRequest request) {
+        String error = "Security error";
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
 }

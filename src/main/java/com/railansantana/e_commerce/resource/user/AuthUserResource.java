@@ -3,7 +3,7 @@ package com.railansantana.e_commerce.resource.user;
 import com.railansantana.e_commerce.dtos.auth.RequestLoginDTO;
 import com.railansantana.e_commerce.dtos.auth.RequestRegisterDTO;
 import com.railansantana.e_commerce.dtos.auth.ResponseDTO;
-import com.railansantana.e_commerce.services.user.UserService;
+import com.railansantana.e_commerce.services.user.AuthUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +18,7 @@ import java.net.URI;
 @RequestMapping(value = "/auth")
 public class AuthUserResource {
     @Autowired
-    UserService userService;
+    AuthUserService userService;
 
     @PostMapping(value = "/login")
     public ResponseEntity<ResponseDTO> login (@RequestBody RequestLoginDTO req){
