@@ -29,7 +29,11 @@ public class DataUserResource {
         return ResponseEntity.ok().body(userService.update(id, obj, Authorization));
     }
 
-    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 
 
 }

@@ -42,6 +42,13 @@ public class DataUserService {
                 obj.get().getAddress());
     }
 
+    public User findById(String id) {
+        Optional<User> obj = userRepository.findById(id);
+        if (obj.isEmpty()) {
+            throw new ResourceNotFoundException();
+        }
+        return obj.get();
+    }
 
     public ResponseDTO update(String id, UpdateUserDTO obj, String token) {
         Optional<User> user = userRepository.findById(id);
@@ -66,5 +73,7 @@ public class DataUserService {
         user.setAddress(obj.address());
     }
 
-
+    public void delete(String id) {
+        userRepository.deleteById(findById(id).getId());
+    }
 }
