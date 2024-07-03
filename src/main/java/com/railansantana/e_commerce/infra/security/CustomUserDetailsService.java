@@ -1,16 +1,15 @@
 package com.railansantana.e_commerce.infra.security;
 
-
 import com.railansantana.e_commerce.domain.User;
 import com.railansantana.e_commerce.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-@Component
+@Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository repository;
@@ -21,7 +20,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = repository.findByEmail(username).orElseThrow(()-> new UsernameNotFoundException("Email não encontrado"));
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
+        User user = repository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Email não encontrado"));
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(), user.getPassword(), new ArrayList<>()
+        );
     }
 }

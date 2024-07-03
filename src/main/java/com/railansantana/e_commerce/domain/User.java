@@ -30,6 +30,7 @@ public class User implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant createdAt;
     private String address;
+    private String roles;
     @DBRef
     private List<Order> orders = new ArrayList<>();
 

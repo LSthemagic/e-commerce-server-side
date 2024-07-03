@@ -20,7 +20,6 @@ import java.util.Collections;
 public class SecurityFilter extends OncePerRequestFilter {
 
     private final TokenService tokenService;
-
     private final UserRepository userRepository;
 
     public SecurityFilter(UserRepository userRepository, TokenService tokenService) {
@@ -28,24 +27,26 @@ public class SecurityFilter extends OncePerRequestFilter {
         this.tokenService = tokenService;
     }
 
-
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
-        var token = this.recoverToken(request);
-        var login = tokenService.validToken(token);
+        String token = recoverToken(request);
+        String email = tokenService.validToken(token);
+        if (token != null && !email.isEmpty()) {
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("User Not Found"));
 
-        if(login != null){
-            User user = userRepository.findByEmail(login).orElseThrow(() -> new RuntimeException("User Not Found"));
-            var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
+            String role = user.getRoles() != null ? user.getRoles().toUpperCase() : "USER";
+            var authorities =  Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
+            System.err.println("AUTHORITIES"+authorities);
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+
         filterChain.doFilter(request, response);
     }
 
-    private String recoverToken(HttpServletRequest request){
-        var authHeader = request.getHeader("Authorization");
-        if(authHeader == null) return null;
-        return authHeader.replace("Bearer ", "");
+    private String recoverToken(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        return (authHeader != null && authHeader.startsWith("Bearer ")) ? authHeader.substring(7) : null;
     }
 }
