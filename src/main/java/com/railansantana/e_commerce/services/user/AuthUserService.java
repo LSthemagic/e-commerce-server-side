@@ -1,6 +1,6 @@
 package com.railansantana.e_commerce.services.user;
 
-import com.railansantana.e_commerce.domain.user.User;
+import com.railansantana.e_commerce.domain.User;
 import com.railansantana.e_commerce.dtos.auth.RequestRegisterDTO;
 import com.railansantana.e_commerce.dtos.auth.ResponseDTO;
 import com.railansantana.e_commerce.infra.security.TokenService;

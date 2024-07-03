@@ -1,6 +1,6 @@
 package com.railansantana.e_commerce.infra.security;
 
-import com.railansantana.e_commerce.domain.user.User;
+import com.railansantana.e_commerce.domain.User;
 import com.railansantana.e_commerce.repository.user.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

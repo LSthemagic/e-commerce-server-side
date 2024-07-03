@@ -1,7 +1,7 @@
 package com.railansantana.e_commerce.repository.user;
 
 
-import com.railansantana.e_commerce.domain.user.User;
+import com.railansantana.e_commerce.domain.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
