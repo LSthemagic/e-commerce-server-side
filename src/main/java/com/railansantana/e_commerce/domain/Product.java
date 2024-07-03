@@ -25,7 +25,6 @@ public class Product implements Serializable {
     private String category;
     private String image;
 
-
     public Double calculateDiscount(double percent) {
         return price * (percent / 100);
     }
@@ -33,7 +32,6 @@ public class Product implements Serializable {
     public void insertDiscount(double percent) {
         setPrice(calculateDiscount(percent));
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -45,6 +43,6 @@ public class Product implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hash(id);
     }
 }

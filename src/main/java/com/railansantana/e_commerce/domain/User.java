@@ -1,7 +1,6 @@
 package com.railansantana.e_commerce.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,15 +21,18 @@ import java.util.List;
 public class User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+
     @Id
     private String id;
     private String name;
     private String email;
     private String password;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant createdAt;
     private String address;
     private String roles;
+
     @DBRef
     private List<Order> orders = new ArrayList<>();
 
@@ -39,7 +41,7 @@ public class User implements Serializable {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.createdAt =  Instant.now();
+        this.createdAt = Instant.now();
         this.address = address;
     }
 
@@ -48,19 +50,10 @@ public class User implements Serializable {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.createdAt =  Instant.now();
+        this.createdAt = Instant.now();
     }
 
     public void updateAddress(String address) {
         setAddress(address);
-    }
-
-    public void addOrder(Order order) {
-        this.orders.add(order);
-        order.setClient(this);
-    }
-
-    public List<Order> listOrders() {
-        return orders;
     }
 }

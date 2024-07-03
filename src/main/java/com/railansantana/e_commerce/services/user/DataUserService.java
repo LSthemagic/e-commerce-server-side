@@ -2,6 +2,7 @@ package com.railansantana.e_commerce.services.user;
 
 import com.railansantana.e_commerce.domain.User;
 import com.railansantana.e_commerce.dtos.auth.ResponseDTO;
+import com.railansantana.e_commerce.dtos.auth.ResponseFullDataDTO;
 import com.railansantana.e_commerce.dtos.auth.UpdateUserDTO;
 import com.railansantana.e_commerce.infra.security.TokenService;
 import com.railansantana.e_commerce.repository.UserRepository;
@@ -28,17 +29,19 @@ public class DataUserService {
         return token;
     }
 
-    public ResponseDTO findById(String id, String token) {
+    public ResponseFullDataDTO findById(String id, String token) {
         Optional<User> obj = userRepository.findById(id);
         if (obj.isEmpty()) {
             throw new ResourceNotFoundException();
         }
-        return new ResponseDTO(
+        return new ResponseFullDataDTO(
                 obj.get().getId(),
-                obj.get().getEmail(),
                 obj.get().getName(),
+                obj.get().getEmail(),
+                obj.get().getOrders(),
                 validateToken(token),
-                obj.get().getAddress());
+                obj.get().getAddress(),
+                obj.get().getCreatedAt());
     }
 
     public User findById(String id) {
@@ -74,5 +77,9 @@ public class DataUserService {
 
     public void delete(String id) {
         userRepository.deleteById(findById(id).getId());
+    }
+
+    public void save(User user){
+        userRepository.save(user);
     }
 }

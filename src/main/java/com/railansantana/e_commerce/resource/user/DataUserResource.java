@@ -1,6 +1,7 @@
 package com.railansantana.e_commerce.resource.user;
 
 import com.railansantana.e_commerce.dtos.auth.ResponseDTO;
+import com.railansantana.e_commerce.dtos.auth.ResponseFullDataDTO;
 import com.railansantana.e_commerce.dtos.auth.UpdateUserDTO;
 import com.railansantana.e_commerce.services.user.DataUserService;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,7 @@ public class DataUserResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseDTO> findById(@PathVariable String id, @RequestHeader String Authorization) {
+    public ResponseEntity<ResponseFullDataDTO> findById(@PathVariable String id, @RequestHeader String Authorization) {
         return ResponseEntity.ok().body(userService.findById(id, Authorization));
     }
 
