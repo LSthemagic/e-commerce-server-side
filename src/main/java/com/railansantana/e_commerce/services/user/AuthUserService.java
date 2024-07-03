@@ -4,7 +4,7 @@ import com.railansantana.e_commerce.domain.User;
 import com.railansantana.e_commerce.dtos.auth.RequestRegisterDTO;
 import com.railansantana.e_commerce.dtos.auth.ResponseDTO;
 import com.railansantana.e_commerce.infra.security.TokenService;
-import com.railansantana.e_commerce.repository.user.UserRepository;
+import com.railansantana.e_commerce.repository.UserRepository;
 import com.railansantana.e_commerce.services.Exceptions.AuthenticateException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

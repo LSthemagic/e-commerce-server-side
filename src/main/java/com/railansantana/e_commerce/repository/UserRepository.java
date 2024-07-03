@@ -1,4 +1,4 @@
-package com.railansantana.e_commerce.repository.user;
+package com.railansantana.e_commerce.repository;
 
 
 import com.railansantana.e_commerce.domain.User;
