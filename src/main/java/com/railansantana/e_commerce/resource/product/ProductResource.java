@@ -1,6 +1,7 @@
 package com.railansantana.e_commerce.resource.product;
 
 import com.railansantana.e_commerce.domain.Product;
+import com.railansantana.e_commerce.resource.util.URL;
 import com.railansantana.e_commerce.services.product.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,16 @@ public class ProductResource {
     public ResponseEntity<Product> delete(@PathVariable String id) {
         productService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Product> update(@PathVariable String id, @RequestBody Product product) {
+        return ResponseEntity.ok().body(productService.update(id, product));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> findByName(@RequestParam(value = "text", defaultValue = "") String text){
+        return ResponseEntity.ok().body(productService.findByName(URL.decodeParam(text)));
     }
 
 }

@@ -60,9 +60,8 @@ public class ProductService {
         obj.setCategory(product.getCategory());
     }
 
-    public Product findByName(String name){
-        return productRepository.findByNameContainsIgnoreCase(name).orElse(null);
+    public List<Product> findByName(String name){
+        return productRepository.findByNameContainsIgnoreCase(name);
     }
-
 
 }
