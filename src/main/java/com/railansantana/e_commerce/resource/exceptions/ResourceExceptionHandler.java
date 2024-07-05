@@ -41,4 +41,13 @@ public class ResourceExceptionHandler {
                 error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
+
+    @ExceptionHandler(SecurityException.class)
+    public ResponseEntity<StandardError> security(SecurityException e, HttpServletRequest request) {
+        String error = "Authenticate error";
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        StandardError err = new StandardError(Instant.now(), status.value(),
+                error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
 }
