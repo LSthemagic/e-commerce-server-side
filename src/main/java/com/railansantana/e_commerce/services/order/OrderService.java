@@ -35,6 +35,14 @@ public class OrderService {
         return user.getOrders();
     }
 
+    public void createOrder(String userId, Order order) {
+        User user = getCurrentUser(userId);
+        order.setClient(user);
+        user.getOrders().add(order);
+        orderRepository.save(order);
+        userService.save(user);
+    }
+
     public void addProductToOrder(String userId, String orderId, String productId) {
         User user = getCurrentUser(userId);
         System.err.println("product id"+productId);
@@ -44,7 +52,6 @@ public class OrderService {
         if (optionalOrder.isEmpty()) {
             throw new ResourceNotFoundException("Order not found");
         }
-//        Order order = optionalOrder.get();
         optionalOrder.get().addProduct(product);
         optionalOrder.get().calculateTotalPrice();
         optionalOrder.get().finalizeOrder(OrderStatus.WAITING_PAYMENT);
@@ -57,27 +64,19 @@ public class OrderService {
 
     public void removeProductFromOrder(String userId, String orderId, String productId) {
         Product product = productService.findById(productId);
-        Optional<Order> optionalOrder = getCurrentUser(userId).getOrders().stream().filter(order -> order.getId().equals(orderId)).findFirst();
+        User user = getCurrentUser(userId);
+        Optional<Order> optionalOrder = user.getOrders().stream().filter(order -> order.getId().equals(orderId)).findFirst();
 
         if (optionalOrder.isEmpty()) {
             throw new ResourceNotFoundException("Order not found");
         }
 
-        Order order = optionalOrder.get();
-        order.removeProduct(product);
-        order.calculateTotalPrice();
-        orderRepository.save(order);
-
-    }
-
-    public void createOrder(String userId, Order order) {
-        User user = getCurrentUser(userId);
-//        order = new Order(null, user, null, null,null,null);
-        order.setClient(user);
-        user.getOrders().add(order);
-//        userService.save(user);
-        orderRepository.save(order);
+//        Order order = optionalOrder.get();
+        optionalOrder.get().removeProduct(product);
+        optionalOrder.get().calculateTotalPrice();
         userService.save(user);
+        orderRepository.save(optionalOrder.get());
+
     }
 
     public void removeOrder(String userId, String orderId) {
