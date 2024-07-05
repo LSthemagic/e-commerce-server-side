@@ -2,6 +2,7 @@ package com.railansantana.e_commerce.domain;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serial;
@@ -24,6 +25,9 @@ public class Product implements Serializable {
     private double price;
     private String category;
     private String image;
+    private int quantity;
+    @DBRef
+    private Stock stock;
 
     public Double calculateDiscount(double percent) {
         return price * (percent / 100);

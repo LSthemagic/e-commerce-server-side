@@ -3,7 +3,11 @@ package com.railansantana.e_commerce.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.railansantana.e_commerce.domain.enums.OrderStatus;
-import lombok.*;
+import com.railansantana.e_commerce.services.Exceptions.ResourceNotFoundException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -35,6 +40,12 @@ public class Order {
     private Instant createdAt;
 
     public void addProduct(Product product) {
+        Optional<Product> p = listProducts.stream().filter(x->x.getId().equals(product.getId())).findFirst();
+
+        if(p.isEmpty() || p.get().getQuantity() <= 0) {
+            throw new ResourceNotFoundException("product not found in stock");
+        }
+
         listProducts.add(product);
         calculateTotalPrice();
     }
