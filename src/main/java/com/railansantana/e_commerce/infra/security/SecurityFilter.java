@@ -2,6 +2,7 @@ package com.railansantana.e_commerce.infra.security;
 
 import com.railansantana.e_commerce.domain.User;
 import com.railansantana.e_commerce.repository.UserRepository;
+import com.railansantana.e_commerce.services.Exceptions.ResourceNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +34,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         String email = tokenService.validToken(token);
         if (token != null && !email.isEmpty()) {
             User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new RuntimeException("User Not Found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
 
             String role = user.getRoles() != null ? user.getRoles().toUpperCase() : "USER";
             var authorities =  Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
