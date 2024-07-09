@@ -5,7 +5,6 @@ import com.railansantana.e_commerce.domain.Product;
 import com.railansantana.e_commerce.domain.User;
 import com.railansantana.e_commerce.domain.enums.OrderStatus;
 import com.railansantana.e_commerce.repository.OrderRepository;
-import com.railansantana.e_commerce.repository.ProductRepository;
 import com.railansantana.e_commerce.services.Exceptions.ResourceNotFoundException;
 import com.railansantana.e_commerce.services.product.ProductService;
 import com.railansantana.e_commerce.services.user.DataUserService;

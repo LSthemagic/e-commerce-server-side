@@ -59,6 +59,7 @@ public class ProductService {
         obj.setImage(product.getImage());
         obj.setCategory(product.getCategory());
         obj.setQuantity(product.getQuantity());
+        obj.setStock(product.getStock());
     }
 
     public List<Product> findByName(String name){

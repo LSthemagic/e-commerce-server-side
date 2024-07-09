@@ -1,5 +1,6 @@
 package com.railansantana.e_commerce.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -26,6 +27,7 @@ public class Product implements Serializable {
     private String category;
     private String image;
     private int quantity;
+    @JsonIgnore
     @DBRef
     private Stock stock;
 
