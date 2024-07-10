@@ -40,12 +40,6 @@ public class Order {
     private Instant createdAt;
 
     public void addProduct(Product product) {
-        Optional<Product> p = listProducts.stream().filter(x->x.getId().equals(product.getId())).findFirst();
-
-        if(p.isEmpty() || p.get().getQuantity() <= 0) {
-            throw new ResourceNotFoundException("product not found in stock");
-        }
-
         listProducts.add(product);
         calculateTotalPrice();
     }

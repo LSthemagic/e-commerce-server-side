@@ -1,6 +1,10 @@
 package com.railansantana.e_commerce.services.order;
 
+import com.mercadopago.exceptions.MPApiException;
+import com.mercadopago.exceptions.MPException;
+import com.mercadopago.resources.preference.Preference;
 import com.railansantana.e_commerce.domain.Order;
+import com.railansantana.e_commerce.domain.Payment;
 import com.railansantana.e_commerce.domain.Product;
 import com.railansantana.e_commerce.domain.User;
 import com.railansantana.e_commerce.domain.enums.OrderStatus;
@@ -9,6 +13,8 @@ import com.railansantana.e_commerce.services.Exceptions.ResourceNotFoundExceptio
 import com.railansantana.e_commerce.services.product.ProductService;
 import com.railansantana.e_commerce.services.user.DataUserService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,13 +23,16 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class OrderService {
+    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+
+    private final Payment payment;
     private final OrderRepository orderRepository;
     private final DataUserService userService;
     private final ProductService productService;
 
     private User getCurrentUser(String id) {
         User obj = userService.findById(id);
-        if (obj == null){
+        if (obj == null) {
             throw new ResourceNotFoundException("User not found");
         }
         return obj;
@@ -42,23 +51,31 @@ public class OrderService {
         userService.save(user);
     }
 
-    public void addProductToOrder(String userId, String orderId, String productId) {
-        User user = getCurrentUser(userId);
-        System.err.println("product id"+productId);
-        Product product = productService.findById(productId);
-        Optional<Order> optionalOrder = user.getOrders().stream().filter(order -> order.getId().equals(orderId)).findFirst();
+    public void addProductToOrder(String userId, String orderId, String productId) throws MPException, MPApiException {
+        try {
 
-        if (optionalOrder.isEmpty()) {
-            throw new ResourceNotFoundException("Order not found");
+
+            User user = getCurrentUser(userId);
+            System.err.println("product id" + productId);
+            Product product = productService.findById(productId);
+            Optional<Order> optionalOrder = user.getOrders().stream().filter(order -> order.getId().equals(orderId)).findFirst();
+
+            if (optionalOrder.isEmpty()) {
+                throw new ResourceNotFoundException("Order not found");
+            }
+            optionalOrder.get().addProduct(product);
+            optionalOrder.get().calculateTotalPrice();
+            optionalOrder.get().finalizeOrder(OrderStatus.WAITING_PAYMENT);
+
+
+            Preference p = payment.configMercadoPago(product, 2);
+            System.err.println(payment.convertObjectToJson(p.getResponse()));
+            userService.save(user);
+            orderRepository.save(optionalOrder.get());
+        } catch (MPApiException e) {
+            logger.error("Error during payment configuration: {}", e.getMessage(), e);
+            throw e;
         }
-        optionalOrder.get().addProduct(product);
-        optionalOrder.get().calculateTotalPrice();
-        optionalOrder.get().finalizeOrder(OrderStatus.WAITING_PAYMENT);
-        System.err.println("------------- optionalOrder.get() ----------------");
-        System.err.println(optionalOrder.get());
-        System.err.println("--------------------------------------------------");
-        userService.save(user);
-        orderRepository.save(optionalOrder.get());
     }
 
     public void removeProductFromOrder(String userId, String orderId, String productId) {

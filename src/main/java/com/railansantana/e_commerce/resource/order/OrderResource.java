@@ -1,5 +1,7 @@
 package com.railansantana.e_commerce.resource.order;
 
+import com.mercadopago.exceptions.MPApiException;
+import com.mercadopago.exceptions.MPException;
 import com.railansantana.e_commerce.domain.Order;
 import com.railansantana.e_commerce.services.order.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,7 @@ public class OrderResource {
     }
 
     @PostMapping("/{userId}/{orderId}/{productId}")
-    public ResponseEntity<Void> addProductToOrder(@PathVariable String userId, @PathVariable String orderId, @PathVariable String productId) {
+    public ResponseEntity<Void> addProductToOrder(@PathVariable String userId, @PathVariable String orderId, @PathVariable String productId) throws MPException, MPApiException {
         orderService.addProductToOrder(userId, orderId, productId);
         return ResponseEntity.status(204).build();
     }
