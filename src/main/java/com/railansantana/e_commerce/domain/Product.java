@@ -26,7 +26,6 @@ public class Product implements Serializable {
     private double price;
     private String category;
     private String image;
-    private int quantity;
     @JsonIgnore
     @DBRef
     private Stock stock;

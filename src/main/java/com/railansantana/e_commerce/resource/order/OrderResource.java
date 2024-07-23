@@ -1,7 +1,5 @@
 package com.railansantana.e_commerce.resource.order;
 
-import com.mercadopago.exceptions.MPApiException;
-import com.mercadopago.exceptions.MPException;
 import com.railansantana.e_commerce.domain.Order;
 import com.railansantana.e_commerce.services.order.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -27,15 +25,15 @@ public class OrderResource {
         return ResponseEntity.status(201).build();
     }
 
-    @PostMapping("/{userId}/{orderId}/{productId}")
-    public ResponseEntity<Void> addProductToOrder(@PathVariable String userId, @PathVariable String orderId, @PathVariable String productId) throws MPException, MPApiException {
-        orderService.addProductToOrder(userId, orderId, productId);
+    @PostMapping("/{userId}/{orderId}/{productId}/{quantity}")
+    public ResponseEntity<Void> addProductToOrder(@PathVariable String userId, @PathVariable String orderId, @PathVariable String productId, @PathVariable int quantity)  {
+        orderService.addProductToOrder(userId, orderId, productId, quantity);
         return ResponseEntity.status(204).build();
     }
 
-    @DeleteMapping("/{userId}/{orderId}/{productId}")
-    public ResponseEntity<Void> removeProductFromOrder(@PathVariable String userId, @PathVariable String orderId, @PathVariable String productId) {
-        orderService.removeProductFromOrder(userId, orderId, productId);
+    @DeleteMapping("/{userId}/{orderId}/{productId}/{quantity}")
+    public ResponseEntity<Void> removeProductFromOrder(@PathVariable String userId, @PathVariable String orderId, @PathVariable String productId, @PathVariable Integer quantity) {
+        orderService.removeProductFromOrder(userId, orderId, productId, quantity);
         return ResponseEntity.noContent().build();
     }
 

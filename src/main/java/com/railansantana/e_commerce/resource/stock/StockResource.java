@@ -26,24 +26,24 @@ public class StockResource {
         return ResponseEntity.ok().body(stockService.findById(id));
     }
 
-    @PostMapping("/{productId}")
-    public ResponseEntity<Void> save(@PathVariable String productId){
-        Stock res = stockService.save(productId);
+    @PostMapping("/{productId}/{quantity}")
+    public ResponseEntity<Void> save(@PathVariable String productId, @PathVariable Integer quantity){
+        Stock res = stockService.save(productId, quantity);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(res.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
-    @PostMapping("/addProduct/{productId}/{stockId}")
-    public ResponseEntity<Void> addProduct(@PathVariable String productId, @PathVariable String stockId){
+    @PostMapping("/addProduct/{productId}/{stockId}/{quantity}")
+    public ResponseEntity<Void> addProduct(@PathVariable String productId, @PathVariable String stockId, @PathVariable Integer quantity){
         Stock res = stockService.findById(stockId);
-        stockService.addProductToStock(productId, stockId);
+        stockService.addQuantityProducts(productId, stockId, quantity);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(res.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
     @DeleteMapping("/removeProduct/{productId}/{stockId}/{quantity}")
     public ResponseEntity<Void> removeProduct(@PathVariable String productId, @PathVariable String stockId, @PathVariable int quantity){
-        stockService.removeProductFromStock(productId, stockId, quantity);
+        stockService.removeQuantityProductFromStock(productId, stockId, quantity);
         return ResponseEntity.noContent().build();
     }
 

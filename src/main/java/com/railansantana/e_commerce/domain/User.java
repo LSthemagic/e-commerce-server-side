@@ -1,6 +1,7 @@
 package com.railansantana.e_commerce.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.railansantana.e_commerce.dtos.auth.ResponseFullDataDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -51,6 +52,13 @@ public class User implements Serializable {
         this.email = email;
         this.password = password;
         this.createdAt = Instant.now();
+    }
+
+    public User(ResponseFullDataDTO user) {
+        setName(user.name());
+        setEmail(user.email());
+        setAddress(user.address());
+        getOrders().add((Order) user.orders());
     }
 
     public void updateAddress(String address) {

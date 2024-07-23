@@ -11,10 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,22 +24,23 @@ public class Stock implements Serializable {
     @Id
     private String id;
     @DBRef
-    private List<Product> product = new ArrayList<>();
+    private Product product;
+    private Integer quantity;
 
 
-    public void addStock(int quantity, Product prod) {
-       prod.setQuantity(quantity + prod.getQuantity());
+    public void updateStock(int quantity) {
+     setQuantity(getQuantity() + quantity);
     }
 
-    public void removeStock(int quantity, Product prod) {
-        if(!verifyStock(quantity, prod)) {
+    public void removeStock(int quantity) {
+        if(!verifyStock(quantity)) {
            throw new ResourceNotFoundException("quantity out of stock");
         }
-        prod.setQuantity(prod.getQuantity() - quantity);
+       setQuantity(getQuantity() - quantity);
     }
 
-    public Boolean verifyStock(int quantity, Product prod) {
-        return prod.getQuantity() >= quantity;
+    public Boolean verifyStock(int quantity) {
+        return getQuantity() >= quantity;
     }
 
 }

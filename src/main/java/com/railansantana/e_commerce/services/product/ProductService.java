@@ -58,7 +58,6 @@ public class ProductService {
         obj.setPrice(product.getPrice());
         obj.setImage(product.getImage());
         obj.setCategory(product.getCategory());
-        obj.setQuantity(product.getQuantity());
         obj.setStock(product.getStock());
     }
 

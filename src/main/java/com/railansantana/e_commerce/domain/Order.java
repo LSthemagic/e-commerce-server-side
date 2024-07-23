@@ -35,24 +35,36 @@ public class Order {
 
     private Double totalPrice;
     private OrderStatus status;
+    private int quantity;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant createdAt;
 
-    public void addProduct(Product product) {
-        listProducts.add(product);
-        calculateTotalPrice();
+    public void addProduct(Product product, int quantity) {
+        listProducts.add(new Product(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice(),
+                product.getCategory(),
+                product.getImage(),
+                product.getStock())
+        );
+        this.quantity += quantity;
+    }
+
+    public void updateQuantityOrderProduct(int quantity){
+        this.quantity += quantity;
+        calculateTotalPrice(quantity);
     }
 
     public void removeProduct(Product product) {
         listProducts.removeIf(x -> x.getId().equals(product.getId()));
-        calculateTotalPrice();
+        calculateTotalPrice(getQuantity());
     }
 
-    public void calculateTotalPrice() {
-        this.totalPrice = listProducts.stream()
-                .mapToDouble(Product::getPrice)
-                .sum();
+    public void calculateTotalPrice(Integer quantityProducts) {
+        this.totalPrice = listProducts.stream().mapToDouble(x -> x.getPrice() * quantityProducts).sum();
     }
 
     public void finalizeOrder(OrderStatus status) {

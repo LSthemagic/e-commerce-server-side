@@ -5,7 +5,7 @@ import com.railansantana.e_commerce.domain.Order;
 import java.time.Instant;
 import java.util.List;
 
-public record ResponseFullDataDTO(String id, String name, String email, List<Order> orders, String token,
+public record ResponseFullDataDTO(String id, String name, String email, List<Order> orders,
                                   String address, Instant createdAt) {
 }
 

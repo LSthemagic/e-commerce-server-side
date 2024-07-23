@@ -19,15 +19,15 @@ public class DataUserResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseFullDataDTO> findById(@PathVariable String id, @RequestHeader String Authorization) {
-        return ResponseEntity.ok().body(userService.findById(id, Authorization));
+    public ResponseEntity<ResponseFullDataDTO> findById(@PathVariable String id) {
+        return ResponseEntity.ok().body(userService.findById(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO> update(@NotNull @PathVariable String id,
-                                                @NotNull @RequestBody UpdateUserDTO obj,
-                                                @RequestHeader String Authorization) {
-        return ResponseEntity.ok().body(userService.update(id, obj, Authorization));
+                                                @NotNull @RequestBody UpdateUserDTO obj
+                                               ) {
+        return ResponseEntity.ok().body(userService.update(id, obj));
     }
 
     @DeleteMapping("/{id}")
